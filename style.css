@@ -1,0 +1,950 @@
+/* ====================================
+変数定義 (カラーテーマ)
+==================================== */
+:root {
+    /* 基本のダークテーマ */
+    --background-color: #000000;
+    --glass-bg: rgba(29, 29, 31, 0.7);
+    /* 少し調整したガラス背景 */
+    --text-primary: #f5f5f7;
+    --text-secondary: #a1a1a6;
+    --border-color: rgba(255, 255, 255, 0.1);
+
+    /* ライトテーマ用のカラー */
+    --light-bg: #ffffff;
+    --light-section-bg: #f8f9fa;
+    --light-text-primary: #1d1d1f;
+    --light-text-secondary: #4a4a4a;
+    --light-card-bg: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
+
+    /* アクセントカラー */
+    --accent-color-primary: #c29090;
+}
+
+/* ====================================
+基本設定 & リセット
+==================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic Pro', sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+    background-color: var(--background-color);
+    overflow-x: hidden;
+}
+
+/* 画像のレスポンシブ対応 (基本設定) */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ====================================
+オープニング画面
+==================================== */
+.opening-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #000000;
+    /* Black Background */
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 1.5s ease-out;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.opening-screen::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+    opacity: 0.3;
+}
+
+.opening-screen.fade-out {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.opening-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Center the group */
+    width: 100%;
+    height: 100%;
+    position: relative;
+    perspective: 1000px;
+    gap: 2rem;
+    /* Space between Image and Slogan */
+}
+
+.opening-image {
+    /* Maximize size but respect aspect ratio */
+    width: 800px;
+    /* Explicit large size (approx 2x previous assumed size) */
+    height: auto;
+    max-width: 100%;
+    /* Fill available space as needed */
+    max-height: 100vh;
+    /* Fill available height */
+
+    display: block;
+    object-fit: contain;
+    /* CRITICAL: Prevent aspect ratio distortion */
+
+    filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+
+    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: translateZ(0);
+
+    /* Allow shrinking if viewport is tiny, but maintain ratio via object-fit if set to fixed dims.
+       With width:auto/height:auto, it shouldn't distort. */
+    flex-shrink: 1;
+}
+
+/* Slogan Style - Right Side, Vertical */
+.opening-slogan {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: clamp(1.2rem, 4vw, 3rem);
+    /* Slightly smaller clamp min */
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 0.5rem;
+    font-weight: 300;
+
+    /* Ensure it stays to the right of the image in the flex container */
+    flex-shrink: 0;
+
+    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+    transform: translateZ(0);
+}
+
+/* Mobile Adjustments to ensure image remains large without breaking */
+@media (max-width: 768px) {
+    .opening-content {
+        gap: 1rem;
+        /* Undo gap slightly */
+    }
+
+    .opening-image {
+        max-width: 70vw;
+        /* Adjust for mobile execution context */
+    }
+
+    .opening-slogan {
+        letter-spacing: 0.3rem;
+        /* Tighter layout */
+    }
+}
+
+
+
+.opening-screen.mouse-moved .opening-image,
+.opening-screen.mouse-moved .opening-slogan {
+    transform: translateZ(200px) scale(1.5);
+    /* Reduced scale to prevent losing context */
+    opacity: 0.8;
+    filter: blur(2px);
+}
+
+.opening-screen.converged .opening-image,
+.opening-screen.converged .opening-slogan {
+    opacity: 0;
+    transform: translateZ(500px) scale(2.0);
+    filter: blur(20px);
+}
+
+.opening-instruction {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    text-align: center;
+    animation: pulse 3s infinite ease-in-out;
+    font-weight: 300;
+    letter-spacing: 0.05rem;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* ====================================
+メインコンテンツ & ヘッダー
+==================================== */
+.main-content {
+    width: 100%;
+    /* Changed from clamp/max-width to full width */
+    margin: 0;
+    padding: 80px 0 0;
+    /* ヘッダーの高さ分(80px)を確保. No side padding for full bleed */
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 1s ease-out, transform 1s ease-out;
+}
+
+.main-content.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-decoration: none;
+    opacity: 0;
+    animation: slideInLeft 1s ease 0.5s forwards;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    /* ヘッダーの高さ */
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 1000;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    /* 子要素を垂直方向に中央揃え */
+}
+
+/* ヘッダー内のコンテンツ */
+.header-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    /* 左右の余白を調整 */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* 子要素を垂直方向に中央揃え */
+}
+
+/* ヘッダーのナビゲーションのスタイルを修正 */
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    /* ナビゲーション項目の間隔を設定 */
+    justify-content: center;
+    /* ナビゲーションを中央揃え */
+    align-items: center;
+    /* 垂直方向に中央揃え */
+    flex-wrap: nowrap;
+    /* 改行を防ぐ */
+}
+
+nav li {
+    white-space: nowrap;
+    /* テキストの改行を防ぐ */
+}
+
+nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 1rem;
+    /* フォントサイズを調整 */
+    padding: 0.5rem 1rem;
+    /* クリックしやすいように余白を追加 */
+    transition: color 0.2s ease;
+}
+
+nav li:nth-child(1) {
+    animation: slideInDown 0.6s ease 0.8s forwards;
+}
+
+nav li:nth-child(2) {
+    animation: slideInDown 0.6s ease 1s forwards;
+}
+
+nav li:nth-child(3) {
+    animation: slideInDown 0.6s ease 1.2s forwards;
+}
+
+nav a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 400;
+    transition: color 0.2s ease;
+    position: relative;
+    padding-bottom: 5px;
+    /* 下線とのスペース */
+}
+
+nav a:hover {
+    color: var(--text-secondary);
+}
+
+nav a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--text-primary);
+    transition: width 0.3s ease;
+}
+
+nav a:hover::after {
+    width: 100%;
+}
+
+/* ====================================
+ヒーローセクション
+==================================== */
+.hero {
+    width: 100%;
+    margin-left: 0;
+    background-color: var(--light-bg);
+    padding: 8rem 0 5rem;
+    /* Top padding increased for header */
+    position: relative;
+    overflow: hidden;
+    /* Prevent spillover */
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="hero-grid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="0.8" fill="rgba(0,0,0,0.02)"/></pattern></defs><rect width="100" height="100" fill="url(%23hero-grid)"/></svg>');
+    opacity: 0.6;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1000px;
+    /* Increased max-width */
+    margin: 0 auto;
+    padding: 0 2rem;
+
+    /* Enable Container Queries */
+    container-type: inline-size;
+
+    /* Grid Layout - Overlapping Stack */
+    display: grid;
+    grid-template-columns: 1fr;
+    /* Single column stack */
+    grid-template-rows: 1fr;
+    /* Single row stack */
+    align-items: center;
+    justify-items: center;
+    min-height: 400px;
+    /* Ensure height for overlap */
+
+    opacity: 0;
+    transform: translateY(50px);
+    animation: fadeInUp 1.2s ease 1.5s forwards;
+}
+
+/* Title Area */
+.hero h1 {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    z-index: 10;
+    /* Foreground */
+
+    /* Adjusted to use Container Units (cqi) so it fits strict limits */
+    /* 11 chars * 8cqi = ~88% of container width */
+    font-size: clamp(1.5rem, 8cqi, 5.5rem);
+    /* Large impactful text */
+    font-weight: 300;
+    /* Increased weight from 200 to 400 */
+    margin-bottom: 0;
+    color: var(--light-text-primary);
+    text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.8);
+    /* Ensure legibility over image */
+    letter-spacing: -0.05em;
+    white-space: nowrap;
+    /* Prevent wrapping */
+    line-height: 1;
+    text-align: center;
+    mix-blend-mode: multiply;
+    /* Stylish blend with image behind */
+    width: 100%;
+    /* Ensure it knows bounds */
+    overflow: hidden;
+    /* Prevent scrollbar if it barely overflows, though shrinking is better */
+    /* Removed text-overflow: ellipsis per user request */
+}
+
+
+/* Hero Image Area */
+.hero-image {
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
+    z-index: 1;
+    /* Background layer */
+
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Center image in its cell */
+
+    opacity: 0.6;
+    /* Increased opacity slightly since it's color now */
+}
+
+/* OSEビジョンの画像を中央に配置 */
+.ose-icon img {
+    display: block;
+    width: 300px;
+    /* Slightly larger */
+    max-width: 100%;
+    height: auto;
+
+    /* Removed Animation */
+    transform: scale(1.2);
+    /* Static larger scale */
+    /* Removed Grayscale Filter per user request */
+}
+
+
+.hero p {
+    /* Generic p reset for hero, if any other p exists */
+    font-size: 1.2rem;
+    color: var(--light-text-secondary);
+}
+
+/* Removed Vertical Text Style from Hero */
+/* 縦書きのスタイル */
+.vertical-text {
+    /* Use accent color */
+    letter-spacing: 0.5rem;
+    font-weight: 500;
+    border-left: 1px solid var(--border-color);
+    /* Separator line */
+    padding-left: 2rem;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    position: static;
+    /* Reset absolute */
+    transform: none;
+    /* Reset transform */
+}
+
+/* ====================================
+レスポンシブ (モバイル)
+==================================== */
+@media (max-width: 768px) {
+    .hero {
+        padding: 6rem 0 3rem;
+    }
+
+    .hero-content {
+        /* Keep overlapping stack on mobile too */
+        min-height: 300px;
+    }
+
+    .hero h1 {
+        font-size: clamp(1.5rem, 8vw, 3rem);
+        /* Smaller for mobile */
+        mix-blend-mode: normal;
+        /* Normal blend on mobile for safety */
+        color: var(--light-text-primary);
+        white-space: nowrap;
+        /* Keep single line if possible, clamp handles size */
+    }
+
+    .hero-image {
+        /* Ensure it's visible on mobile as well */
+        opacity: 0.3;
+    }
+
+    .ose-icon img {
+        width: 200px;
+    }
+}
+
+
+
+/* ====================================
+メインコンテンツ内のセクション
+==================================== */
+main>section {
+    padding: 5rem 2rem;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+main>section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 作品集セクション */
+#portfolio {
+    width: 100%;
+    /* Changed from 100vw */
+    margin-left: 0;
+    /* Removed neg margin hack */
+    background-color: var(--light-bg);
+    padding: 5rem 0;
+    position: relative;
+    /* ::beforeの基準 */
+    border-radius: 24px;
+    /* Round the corners */
+}
+
+.portfolio-scroll-container {
+    display: flex;
+    /* 横並びに配置 */
+    gap: 2rem;
+    /* 各アイテムの間隔を設定 */
+    overflow-x: auto;
+    /* 横スクロールを有効化 */
+    scroll-snap-type: x mandatory;
+    /* スクロールスナップを有効化 */
+    padding-bottom: 1rem;
+    /* スクロールバーとの間隔を確保 */
+    padding-left: 2rem;
+    /* Add padding for start of scroll */
+    padding-right: 2rem;
+}
+
+.portfolio-item {
+    flex: 0 0 auto;
+    /* アイテムの幅を固定 */
+    width: 200px;
+    /* 各アイテムの幅を設定 */
+    text-align: center;
+    scroll-snap-align: start;
+    /* スクロール位置を調整 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    /* ADDED: Round corners for hover effect */
+    border-radius: 16px;
+    padding: 10px;
+    /* Add some padding so hover shadow isn't tight to image */
+    background: transparent;
+    /* Or white if desired, but user didn't specify background color */
+}
+
+
+.portfolio-item img {
+    width: 100%;
+    /* 画像をアイテムの幅に合わせる */
+    border-radius: 10px;
+    /* 角を丸くする */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* 軽い影を追加 */
+}
+
+.portfolio-item:hover {
+    transform: translateY(-5px);
+    /* ホバー時に少し浮かせる */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    /* ホバー時の影を強調 */
+}
+
+.portfolio-item-caption {
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    color: var(--text-secondary);
+}
+
+h2 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--accent-color-primary);
+    letter-spacing: -0.02em;
+}
+
+.section-content {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto;
+    /* ▼▼▼ 修正: コンテナとして定義 ▼▼▼ */
+    container-type: inline-size;
+}
+
+.section-content p {
+    font-size: 1.1rem;
+    color: var(--light-text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    font-weight: 400;
+}
+
+/* カードスタイル */
+.card {
+    background: var(--light-card-bg);
+    border-radius: 24px;
+    /* ▼▼▼ 修正: デフォルトのパディングを 1.5rem に変更 ▼▼▼ */
+    padding: 1.5rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    margin: 2rem 0;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+    /* Reverted flexbox centering per user request */
+}
+
+/* ▼▼▼ 追記: コンテナクエリ ▼▼▼ */
+/* 親コンテナ(.section-content)の幅が 600px 以上の場合 */
+@container (min-width: 600px) {
+    .card {
+        /* パディングを元に戻す */
+        padding: 3rem;
+    }
+}
+
+.card:hover {
+    transform: translateY(-15px);
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.12), 0 16px 32px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card p {
+    color: var(--light-text-secondary);
+    /* Balanced margins as requested */
+    margin: 1rem 0;
+}
+
+/* CTAボタン */
+.cta-button {
+    display: inline-block;
+    background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+    color: #ffffff;
+    text-decoration: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 500;
+    transition: transform 0.3s cubic-bezier(0.19, 1, 0.22, 1), box-shadow 0.3s cubic-bezier(0.19, 1, 0.22, 1), background 0.3s;
+    margin-top: 1rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.02em;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.cta-button:hover {
+    background: linear-gradient(145deg, #2a2a2a, #3a3a3a);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.cta-button:hover::before {
+    left: 100%;
+}
+
+/* ====================================
+フッター
+==================================== */
+footer {
+    width: 100%;
+    /* Changed from 100vw */
+    margin: 5rem 0 0 0;
+    /* Changed from calc mix to simple top margin */
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    color: var(--text-primary);
+    text-align: center;
+    padding: 3rem 2rem;
+    position: relative;
+    left: 0;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+}
+
+footer p {
+    color: var(--text-secondary);
+    margin-top: 0;
+}
+
+/* ====================================
+ハンバーガーメニュー (モバイル用)
+==================================== */
+.hamburger {
+    display: none;
+    /* デスクトップでは非表示 */
+    flex-direction: column;
+    cursor: pointer;
+    z-index: 1001;
+    background: none;
+    /* 背景なし */
+    border: none;
+    /* ボーダーなし */
+    padding: 0;
+}
+
+.hamburger span {
+    width: 25px;
+    height: 3px;
+    background: var(--text-primary);
+    margin: 3px 0;
+    transition: all 0.3s;
+    border-radius: 2px;
+}
+
+/* ====================================
+アニメーション
+==================================== */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInDown {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ====================================
+お問い合わせカードの指定
+==================================== */
+#contact .card {
+    text-align: center;
+}
+
+#about .card p {
+    text-align: left;
+    /* aboutセクションは左寄せを維持 */
+}
+
+/* ====================================
+トップへ戻るボタン
+==================================== */
+.back-to-top {
+    position: fixed;
+    /* 画面に固定 */
+    bottom: 20px;
+    /* 下から20px */
+    right: 20px;
+    /* 右から20px */
+
+    background: var(--light-card-bg);
+    color: var(--light-text-primary);
+    text-decoration: none;
+    padding: 0.8rem 1.2rem;
+    /* サイズ調整 */
+    border-radius: 50px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    letter-spacing: 0.02em;
+    z-index: 900;
+
+    /* JSで制御するために初期状態は非表示 */
+    opacity: 0;
+    transform: translateY(100px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.back-to-top:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+    /* ホバー時の影 */
+}
+
+/* JSによって .show クラスが付与されたら表示 */
+.back-to-top.show {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+/* ====================================
+レスポンシブ対応 (メディアクエリ)
+==================================== */
+/* ※コンテナクエリを .card に使用したため、
+ここのメディアクエリは主にページ全体（ヘッダーなど）に適用されます */
+@media (max-width: 768px) {
+    .opening-image {
+        width: 250px;
+        height: 200px;
+        font-size: 1rem;
+        left: 25%;
+    }
+
+    .opening-text {
+        font-size: 2rem;
+        right: 15%;
+        letter-spacing: 0.3rem;
+    }
+
+    .header-content {
+        padding: 0 1rem;
+        display: flex;
+        /* Changed from none to flex */
+    }
+
+    .hamburger {
+        display: flex;
+        /* Changed from none to flex */
+    }
+
+    nav ul {
+        position: fixed;
+        top: 80px;
+        /* ヘッダーの高さ */
+
+        right: 0;
+        transform: translateX(100%);
+
+        width: 100%;
+        height: calc(100vh - 80px);
+        /* スクロールできるように高さを設定 */
+        background: var(--glass-bg);
+        /* 背景をガラス効果に */
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        flex-direction: column;
+        /* 縦並び */
+        align-items: center;
+        /* 中央揃え */
+        padding-top: 2rem;
+        gap: 1rem;
+        /* 項目間の余白 */
+        transition: transform 0.3s ease-in-out;
+        /* スムーズな開閉 */
+    }
+
+    nav ul.active {
+        transform: translateX(0);
+        /* メニューを表示 */
+    }
+
+    nav a {
+        font-size: 1.5rem;
+        /* モバイルでのフォントサイズを大きく */
+        padding: 1rem;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    .hero-content {
+        padding: 0 1rem;
+    }
+
+    .vertical-text {
+        display: none;
+        /* モバイルでは非表示にする */
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+        /* h1のサイズ調整 */
+    }
+
+    .hero p {
+        font-size: 1rem;
+        /* pのサイズ調整 */
+    }
+
+    .hero-image {
+        width: auto;
+        height: auto;
+    }
+
+    .hero-image img {
+        width: 200px;
+        max-width: 100%;
+    }
+
+    main>section {
+        padding: 3rem 1rem;
+        /* セクションの余白調整 */
+    }
+
+    /* .card のパディングはコンテナクエリが処理するため、
+ここでの指定は不要 */
+
+    h2 {
+        font-size: 1.8rem;
+        /* h2のサイズ調整 */
+    }
+
+    .portfolio-item {
+        width: 150px;
+        /* 作品アイテムの幅を調整 */
+    }
+}

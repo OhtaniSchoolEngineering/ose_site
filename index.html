@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSE - Ohtani School Engineering</title>
+    <!-- Facivon -->
+    <link rel="icon" href="ose2.png" type="image/png">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="opening-screen" id="openingScreen">
+        <div class="opening-content">
+            <!-- ose2.png as requested -->
+            <img src="ose2.png" alt="OSE Vision" class="opening-image">
+
+            <!-- Slogan on right -->
+            <div class="opening-slogan">
+                あったらいいなを形に
+            </div>
+        </div>
+        <div class="opening-instruction">
+            スクロールしてください
+        </div>
+    </div>
+
+    <!-- Header moved outside main-content to ensure position:fixed works correctly -->
+    <header id="header">
+        <div class="header-content">
+            <a href="#" class="logo">OSE</a>
+            <nav>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <ul id="nav-menu">
+                    <li><a href="#about">OSEについて</a></li>
+                    <li><a href="#portfolio">作品集</a></li>
+                    <li><a href="#contact">興味のある方</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="main-content" id="mainContent">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>プログラミングで未来を創造</h1>
+                <!-- Slogan moved to opening -->
+                <div class="hero-image">
+                    <span class="ose-icon"><img src="ose2.png" alt="OSE Vision Icon"></span>
+                </div>
+                <!-- Vertical text sidebar remains for visual balance or can be removed if strictly moving slogan. 
+                     The design requested separation, but user might want something there. 
+                     Actually, user said "Move vertical text... to opening". 
+                     So I removed it from hero entirely. 
+                     I will add an empty div or adjust CSS to remove the sidebar slot if needed.
+                     For now, assuming the grid in CSS expects 2 columns, 
+                     I should probably handle the empty slot in CSS or let it be empty. -->
+            </div>
+        </section>
+
+        <main>
+            <section class="about" id="about">
+                <div class="section-content">
+                    <h2>プログラミングで世界に彩りを</h2>
+                    <div class="card">
+                        <p>Ohtani School
+                            Engineering（OSE）は、帯広大谷高校の生徒が行っているゼミ活動です。プログラミングで日常生活で使えるアプリやツール、ちょっとしたゲームからwebページなどを制作しています。
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="portfolio" id="portfolio">
+                <div class="section-content">
+                    <h2>作品集</h2>
+                    <div class="card">
+                        <p>OSEでは様々な作品を公開しています。創造性と技術を融合させた、実用的で革新的なソリューションをご覧ください。</p>
+                    </div>
+                    <div class="portfolio-scroll-container">
+                        <div class="portfolio-item">
+                            <img src="d.png" alt="作品1">
+                            <div class="portfolio-item-caption">作品1のタイトル</div>
+                        </div>
+                        <div class="portfolio-item">
+                            <img src="d.png" alt="作品2">
+                            <div class="portfolio-item-caption">作品2のタイトル</div>
+                        </div>
+                        <div class="portfolio-item">
+                            <img src="d.png" alt="作品3">
+                            <div class="portfolio-item-caption">作品3のタイトル</div>
+                        </div>
+                        <div class="portfolio-item">
+                            <img src="d.png" alt="作品4">
+                            <div class="portfolio-item-caption">作品4のタイトル</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="contact" id="contact">
+                <div class="section-content">
+                    <h2>お問い合わせ</h2>
+                    <div class="card">
+                        <p>OSEの活動に興味のある方は、ぜひお気軽にご連絡ください。一緒に技術で世界を変えていきましょう。</p>
+                        <a href="https://forms.gle/yVxx9s7SNq2ZgVd26" class="cta-button">お問い合わせ</a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 Ohtani School Engineering. All rights reserved.</p>
+        </footer>
+    </div> <a href="#" class="back-to-top">トップへ戻る</a>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
