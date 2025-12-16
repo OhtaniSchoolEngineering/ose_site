@@ -566,6 +566,18 @@ main>section.visible {
     /* Add some padding so hover shadow isn't tight to image */
     background: transparent;
     /* Or white if desired, but user didn't specify background color */
+
+    /* Center Content Vertically & Horizontally */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    /* Link Style Resets */
+    text-decoration: none;
+    color: inherit;
+    /* Ensure height stretches to match others if they differ */
+    height: auto;
 }
 
 
